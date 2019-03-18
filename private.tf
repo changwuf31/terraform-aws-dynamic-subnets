@@ -34,7 +34,7 @@ resource "aws_route_table" "private" {
   count  = "${length(var.availability_zones)}"
   vpc_id = "${data.aws_vpc.default.id}"
 
-  tags = "${module.private_label.tags}"
+  tags = "${merge(module.private_label.tags, map("Name",format("%s%s%s", module.private_label.id, var.delimiter, replace(element(var.availability_zones, count.index),"-",var.delimiter))))}"
 }
 
 resource "aws_route_table_association" "private" {
